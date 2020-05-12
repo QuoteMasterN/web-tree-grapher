@@ -16,7 +16,10 @@ class Page:
             f.write('{\n')
             f.write(str(self.title) + '\n')
             f.write(str(self.url) + '\n')
-            f.write(' '.join(self.childLinks))
+            try:
+                f.write(' '.join(self.childLinks))
+            except TypeError:
+                f.write('\n')
             f.write(str(self.notes) + '\n')
             f.write('}\n')
 

@@ -37,9 +37,11 @@ def recursiveScrape(url, visitedLinks, domain):
         curPage.title = None
     curPage.url = url
     curPage.childLinks = []
+    hyperLinks = soup.find_all('a')
+    hyperLinks = list(filter((None).__ne__, hyperLinks))
 
     # get all links on a page
-    for link in soup.find_all('a'):
+    for link in hyperLinks:
         # set hyperLink to href of link
         hyperLink = link.get('href')
         # remove '.' or '..' from the link
