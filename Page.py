@@ -16,7 +16,7 @@ class Page:
             f.write('{\n')
             f.write(str(self.title) + '\n')
             f.write(str(self.url) + '\n')
-            f.write(str(' '.join(self.childLinks) + '\n'))
+            f.write(' '.join(self.childLinks))
             f.write(str(self.notes) + '\n')
             f.write('}\n')
 
