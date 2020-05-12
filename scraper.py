@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 import time
+import sys
 from Page import Page
+# Attempts to solve issue of reaching recursion limit on certain websites
+sys.setrecursionlimit(10000)
 start_time = time.time()
 def main():
     # Get name of root page from user
