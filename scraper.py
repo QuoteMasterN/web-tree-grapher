@@ -1,7 +1,10 @@
 from bs4 import BeautifulSoup
 import requests
 import time
+import sys
 from Page import Page
+# Attempts to solve issue of reaching recursion limit on certain websites
+sys.setrecursionlimit(10000)
 start_time = time.time()
 def main():
     # Get name of root page from user
@@ -22,7 +25,10 @@ param: domain Domain name of the site being scraped
 post: A file containing all pages linked to within the domain is written to output/domain'''
 def recursiveScrape(url, visitedLinks, domain):
     if url in visitedLinks : return True
-    if domain not in url : return True
+    try:
+        if domain not in url : return True
+    except TypeError:
+        return True
     print(url)
     # page object for the current page
     curPage = Page()
