@@ -1,3 +1,4 @@
+import sqlite3
 '''Page class
 
 Used to represent a page'''
@@ -11,16 +12,20 @@ class Page:
     
     # appends current Page object to the text file named domainName in output
     def appendToFile(self, domainName):
-        with open('output/%s' % domainName, 'a') as f:
-            # write opening bracket
-            f.write('{\n')
-            f.write(str(self.title) + '\n')
-            f.write(str(self.url) + '\n')
-            try:
-                f.write(' '.join(self.childLinks))
-            except TypeError:
-                f.write('\n')
-            f.write(str(self.notes) + '\n')
-            f.write('}\n')
+        # connect to database and insert class members
+        data = sqlite3.connect('output/%s' % domainName)
+        c = data.cursor()
+
+        c.execute('INSERT INTO domain VALUES (:title, :url, :childLinks, :notes)',
+        {
+            'title' : self.title,
+            'url' : self.url,
+            'childLinks' : ' '.join(self.childLinks),
+            'notes' : self.notes
+        })
+
+        data.commit()
+
+        data.close()
 
     

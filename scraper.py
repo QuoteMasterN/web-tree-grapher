@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import time
 import sys
+import sqlite3
 from Page import Page
 # Attempts to solve issue of reaching recursion limit on certain websites
 sys.setrecursionlimit(10000)
@@ -12,8 +13,33 @@ def main():
     # Get domain
     domainList = rootPage.split('/')
     domain = domainList[2]
+    
+    # Create and overwrite database if it does not already exist
+    conn = sqlite3.connect('output/%s' % domain)
+    c = conn.cursor()
+    
+    try:
+        c.execute('''CREATE TABLE domain (
+        title text,
+        url text,
+        childLinks text,
+        notes text)
+        ''')
+    except sqlite3.OperationalError:
+        # if table already exists, delete it and create a new one
+        c.execute('''DROP TABLE domain''')
+        c.execute('''CREATE TABLE domain (
+        title text,
+        url text,
+        childLinks text,
+        notes text)
+        ''')
+
+    conn.commit()
+
+    conn.close()
+    
     # Call recursiveScrape
-    open('output/%s' % domain, 'w').close()
     visitedLinks = []
     recursiveScrape(rootPage, visitedLinks, domain)
 
